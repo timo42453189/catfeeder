@@ -1,6 +1,6 @@
 # CatFeeder
 ## Servo motor starts whenever a cat is detected by a AI with a RaspberryPI
-More features like mqtt, a webserver and an API
+Mqtt, a Webserver for logs and an API
 
 I2C communication with an Arduion UNO
 
