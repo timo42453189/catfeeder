@@ -1,6 +1,7 @@
 import threading
 import smbus
 import os
+import socket
 from detect import AutoDetect
 from servo import Motor
 from file_control import FileControl
@@ -8,9 +9,13 @@ from mqtt import Mqtt
 import motion
 import webserver
 
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.connect(("8.8.8.8", 80))
+IP_addres = s.getsockname()[0]
+s.close()
 
 def start_api():
-	os.system("uvicorn api:app --port 5000 --host 192.168.178.46 --log-level critical")
+	os.system(f"uvicorn api:app --port 5000 --host {IP_addres} --log-level critical")
 
 addr = 0x8
 bus = smbus.SMBus(1)
