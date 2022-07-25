@@ -9,7 +9,13 @@ class Mqtt:
 		self.motor = m
 		self.id = 3
 		self.broker_address = "test.mosquitto.org"
-		self.topic = "timo/catfeedingmachine"
+		try:
+			self.topic = str(open("mqtt.conf", "r").read())
+			self.topic = self.topic.replace("\n", "")
+		except FileNotFoundError:
+			error_handler("No mqtt config found", "error")
+			raise FileNotFoundError("No mqtt config found")
+			exit()
 		self.client = mqtt.Client("timo")
 		self.client.on_message = self.on_message
 		self.client.connect(self.broker_address)
@@ -33,7 +39,7 @@ class Mqtt:
 			else:
 				self.motor.start(self.id)
 				self.motor.release(self.id)
-			client.publish("timo/catfeedingmachine", "0")
+			client.publish(self.topic, "0")
 
 
 
