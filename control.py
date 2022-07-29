@@ -1,7 +1,8 @@
-import threading
-import smbus
 import os
+import smbus
 import socket
+import threading
+
 from detect import AutoDetect
 from servo import Motor
 from file_control import FileControl

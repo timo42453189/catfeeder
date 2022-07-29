@@ -1,6 +1,7 @@
+import logging
 import paho.mqtt.client as mqtt
 import time
-import logging
+
 from error import error_handler
 
 

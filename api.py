@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 import logging
+
 from error import error_handler
+
 
 app = FastAPI()
 

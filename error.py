@@ -1,6 +1,7 @@
+import logging
 import smbus
 import time
-import logging
+
 
 logging.basicConfig(level=logging.INFO, filename='app.log', filemode='a', format='%(filename)s - %(asctime)s - %(levelname)s - %(message)s')
 

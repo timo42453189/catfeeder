@@ -1,5 +1,6 @@
-import time
 import logging
+import time
+
 from error import error_handler
 
 class FileControl:
