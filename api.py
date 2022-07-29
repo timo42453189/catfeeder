@@ -3,10 +3,7 @@ import logging
 
 from error import error_handler
 
-
 app = FastAPI()
-
-#logging.basicConfig(level=logging.INFO, filename='app.log', filemode='a', format='%(filename)s - %(asctime)s - %(levelname)s - %(message)s')
 error_handler("API service startet", "info")
 
 @app.get("/start")
