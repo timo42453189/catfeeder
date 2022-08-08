@@ -31,8 +31,9 @@ class Mqtt:
 		self.client.loop_stop()
 
 	def on_message(self, client, userdata, message):
-		message = str(message.payload.decode("utf-8"))
-		if message == "1":
+		message= str(message.payload.decode("utf-8"))
+		#print(message)
+		if message == "true":
 			error_handler("Motor started manually from mqtt", "info")
 			response = self.motor.claim(self.id)
 			if response == 1:
@@ -40,7 +41,7 @@ class Mqtt:
 			else:
 				self.motor.start(self.id)
 				self.motor.release(self.id)
-			client.publish(self.topic, "0")
+			client.publish(self.topic, "false")
 
 
 

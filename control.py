@@ -9,6 +9,7 @@ from file_control import FileControl
 from mqtt import Mqtt
 import motion
 import webserver
+from config_buttons import Button
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.connect(("8.8.8.8", 80))
@@ -27,6 +28,7 @@ m = Motor()
 ai = AutoDetect(m)
 file_handler = FileControl(m)
 mqtt_client = Mqtt(m)
+button_control = Button(m)
 
 def create_threads(p):
         t = []
@@ -34,7 +36,7 @@ def create_threads(p):
                 t.append(threading.Thread(target=i, args=()))
         return t
 
-p = [ai.detect, file_handler.check_file, start_api, mqtt_client.start, motion.start, webserver.start]
+p = [ai.detect, file_handler.check_file, start_api, mqtt_client.start, motion.start, webserver.start, button_control.check]
 t = create_threads(p)
 
 for i in t:
