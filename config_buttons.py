@@ -17,6 +17,7 @@ class Button:
 
 	def check(self):
 		while True:
+			self.portion = int(open("portion.conf", "r").read())
 			for i in self.available_pins:
 				GPIO.setup(int(self.available_pins.get(i)), GPIO.IN, pull_up_down=GPIO.PUD_UP)
 				val = GPIO.input(int(self.available_pins.get(i)))
