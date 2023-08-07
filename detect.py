@@ -1,5 +1,8 @@
 import os
+import io
 import cv2
+from picamera.array import PiRGBArray
+from picamera import PiCamera
 import numpy as np
 import tensorflow as tf
 import sys
@@ -28,9 +31,14 @@ class AutoDetect:
 		self.detection_scores = self.detection_graph.get_tensor_by_name('detection_scores:0')
 		self.detection_classes = self.detection_graph.get_tensor_by_name('detection_classes:0')
 		self.num_detections = self.detection_graph.get_tensor_by_name('num_detections:0')
-		self.camera = cv2.VideoCapture(0)
-		self.ret = self.camera.set(3, self.IM_WIDTH)
-		self.ret = self.camera.set(4, self.IM_HEIGHT)
+		#self.camera = cv2.VideoCapture(1)
+		self.stream = io.BytesIO()
+		self.camera = PiCamera()
+		self.res = (1280, 720)
+		self.camera.resolution = self.res
+		self.rawCapture = PiRGBArray(self.camera, size=self.res)
+		#self.ret = self.camera.set(3, self.IM_WIDTH)
+		#self.ret = self.camera.set(4, self.IM_HEIGHT)
 
 
 	def init_session(self):
@@ -49,14 +57,17 @@ class AutoDetect:
 		error_handler("AI started", "info")
 		counter = 0
 		while(True):
-			ret, frame = self.camera.read()
+			rawCapture = PiRGBArray(self.camera, size=self.res)
+			self.camera.capture(rawCapture, format="bgr")
+			frame = rawCapture.array
 			frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 			frame_expanded = np.expand_dims(frame_rgb, axis=0)
-
+#			cv2.imshow("test", frame)
+#			cv2.waitKey(0)
 			(boxes, scores, classes, num) = self.sess.run(
 			[self.detection_boxes, self.detection_scores, self.detection_classes,
 			self.num_detections], feed_dict={self.image_tensor: frame_expanded})
-
+			print("Läuft")
 			if classes[0][0] == 17:
 				counter = counter + 1
 #				print("Logging")
@@ -76,4 +87,4 @@ class AutoDetect:
 					self.motor.release(self.id)
 					time.sleep(10800)
 
-		self.camera.release()
+		#self.camera.release()
